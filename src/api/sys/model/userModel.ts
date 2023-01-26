@@ -18,6 +18,7 @@ export interface LoginResultModel {
   userId: string | number
   jwtToken: string
   role: RoleInfo
+  permissionList: number[]
 }
 
 /**
@@ -25,6 +26,7 @@ export interface LoginResultModel {
  */
 export interface GetUserInfoModel {
   roles: RoleInfo[]
+  permissionList: number[]
   // 用户id
   id: string | number
   // 用户名

@@ -2,12 +2,12 @@
 
 [![license](https://img.shields.io/github/license/anncwb/vue-vben-admin.svg)](LICENSE)
 
-<h1>Vue vben admin</h1>
+<h1>mini-repository admin</h1>
 </div>
 
 ## 简介
 
-精简 Vue Vben Admin。
+支持maven的小型仓库。
 
 ## 特性
 

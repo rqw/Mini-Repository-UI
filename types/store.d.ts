@@ -30,6 +30,7 @@ export interface UserInfo {
   desc?: string
   homePath?: string
   roles: RoleInfo[]
+  permissionList: number[]
 }
 
 export interface BeforeMiniState {

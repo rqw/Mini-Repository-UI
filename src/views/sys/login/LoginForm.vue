@@ -58,7 +58,7 @@
   import { useUserStore } from '/@/store/modules/user'
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin'
   import { useDesign } from '/@/hooks/web/useDesign'
-  import {encryptByMd5} from "/@/utils/cipher";
+  import { encryptByMd5 } from '/@/utils/cipher'
   //import { onKeyStroke } from '@vueuse/core';
 
   const ACol = Col
