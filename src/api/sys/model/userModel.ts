@@ -38,3 +38,12 @@ export interface GetUserInfoModel {
   // 介绍
   desc?: string
 }
+export interface UserInfo {
+  id: number
+  loginName: string
+  fullname: string
+  password: string
+  act: string
+  mrt: string
+  permissionList: Array<number>
+}

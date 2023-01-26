@@ -16,8 +16,9 @@ const sys: AppRouteModule = {
     {
       path: 'user',
       name: 'UserManager',
-      component: () => import('/@/views/sys/about/index.vue'),
+      component: () => import('/@/views/sys/user/UserManager.vue'),
       meta: {
+        icon: 'ion:key-outline',
         title: t('routes.sys.user'),
         roles: [RoleEnum.USER_MANAGER],
       },
@@ -25,8 +26,9 @@ const sys: AppRouteModule = {
     {
       path: 'repository',
       name: 'RepositoryManager',
-      component: () => import('/@/views/sys/about/index.vue'),
+      component: () => import('/@/views/sys/repository/RepositoryManager.vue'),
       meta: {
+        icon: 'ion:layers-outline',
         title: t('routes.sys.repository'),
         roles: [RoleEnum.REPOS_MANAGER],
       },
@@ -34,8 +36,9 @@ const sys: AppRouteModule = {
     {
       path: 'repository/view',
       name: 'RepositoryView',
-      component: () => import('/@/views/sys/about/index.vue'),
+      component: () => import('/@/views/sys/repository/RepositoryView.vue'),
       meta: {
+        icon: 'ion:tv-outline',
         title: t('routes.sys.repositoryView'),
         roles: [RoleEnum.REPOS_VIEW],
       },
