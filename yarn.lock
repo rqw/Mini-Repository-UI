@@ -9196,6 +9196,11 @@ vue-json-pretty@^2.0.6:
   resolved "https://registry.npmmirror.com/vue-json-pretty/-/vue-json-pretty-2.1.1.tgz#f03202b76141930ab27fdbcb56b242b4d6478079"
   integrity sha512-zl/gWr/zeQU4mUozlBxGu/9ebR/tYywty5VGu8FcHTJwOu9se4OwlPZELruwnzvHODfUOh8rUirSgNTHmLZXVw==
 
+vue-request@^1.2.4:
+  version "1.2.4"
+  resolved "http://maven.haojiankang.com/nexus/repository/npm-group/vue-request/-/vue-request-1.2.4.tgz#02ab150cc2903605464e6efcb501c480d9dd536f"
+  integrity sha512-i+i+6Fog6F8EtYUeueumzKS9Sg06CvjsMXH8TK0YSBxY4sDxIJ+snTEke5rLqiV9d19DTuJOxPQFjTBUpsMtXA==
+
 vue-router@^4.0.14:
   version "4.1.1"
   resolved "https://registry.npmmirror.com/vue-router/-/vue-router-4.1.1.tgz#90cc533efafdcf90d157bdc20a376760cdb59c10"

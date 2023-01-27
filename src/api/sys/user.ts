@@ -2,6 +2,7 @@ import { defHttp } from '/@/utils/http/axios'
 import { LoginParams, LoginResultModel, GetUserInfoModel, UserInfo } from './model/userModel'
 
 import { ErrorMessageMode } from '/#/axios'
+import {Page} from "/@/api/model/baseModel";
 
 enum Api {
   Login = 'user/login',
@@ -26,9 +27,10 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     },
   )
 }
-export function queryUserInfoList() {
-  return defHttp.post<Array<UserInfo>>(
+export function queryUserInfoList(params: Page<UserInfo>) {
+  return defHttp.post<Page<UserInfo>>(
     {
+      params,
       url: Api.QueryUser,
     },
     { errorMessageMode: 'none' },

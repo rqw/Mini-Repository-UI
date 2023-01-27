@@ -17,7 +17,6 @@ Object.keys(modules).forEach((key) => {
   const mod = modules[key].default || {}
   const modList = Array.isArray(mod) ? [...mod] : [mod]
   menuModules.push(...modList)
-  console.log(menuModules)
 })
 
 // ===========================
