@@ -39,11 +39,12 @@ export interface GetUserInfoModel {
   desc?: string
 }
 export interface UserInfo {
-  id: number
-  loginName: string
-  fullname: string
-  password: string
-  act: string
-  mrt: string
-  permissionList: Array<number>
+  id?: number
+  loginName?: string
+  fullname?: string
+  password?: string
+  realPassword?: string
+  act?: string
+  mrt?: string
+  permissionList?: Array<number>
 }

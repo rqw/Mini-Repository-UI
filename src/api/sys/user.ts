@@ -2,11 +2,13 @@ import { defHttp } from '/@/utils/http/axios'
 import { LoginParams, LoginResultModel, GetUserInfoModel, UserInfo } from './model/userModel'
 
 import { ErrorMessageMode } from '/#/axios'
-import {Page} from "/@/api/model/baseModel";
+import { Page } from '/@/api/model/baseModel'
 
 enum Api {
   Login = 'user/login',
   QueryUser = 'user',
+  SaveUser = 'user',
+  DelUser = 'user',
   Logout = '/logout',
   GetUserInfo = 'user/0',
   GetPermCode = '/getPermCode',
@@ -27,6 +29,30 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
     },
   )
 }
+export function saveUser(params: UserInfo, mode: ErrorMessageMode = 'modal') {
+  return defHttp.put<UserInfo>(
+    {
+      url: Api.SaveUser,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  )
+}
+
+export function delUser(params?: number, mode: ErrorMessageMode = 'modal') {
+  return defHttp.delete<any>(
+    {
+      url: Api.DelUser,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  )
+}
+
 export function queryUserInfoList(params: Page<UserInfo>) {
   return defHttp.post<Page<UserInfo>>(
     {
