@@ -1,0 +1,161 @@
+<template>
+  <a-card size="small" title="仓库列表">
+    <a-form :model="searchInfo" name="basic" autocomplete="off">
+      <a-row :gutter="24">
+        <a-col :span="8">
+          <a-form-item label="名称" name="name">
+            <a-input v-model:value="searchInfo.name" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="16">
+          <a-button type="primary" @click="filter">查询</a-button>&nbsp;
+          <a-button type="primary" @click="add">新增</a-button>&nbsp;
+          <a-button type="primary" @click="edit">编辑</a-button>&nbsp;
+          <a-button type="primary" @click="del">删除</a-button>
+        </a-col>
+      </a-row>
+    </a-form>
+    <a-table
+      :columns="columns"
+      :row-key="(record) => record.id"
+      :data-source="dataSource?.dataList"
+      :pagination="pagination"
+      :loading="loading"
+      :rowSelection="rowSelection"
+      @change="handleTableChange"
+      bordered
+      size="small"
+    />
+  </a-card>
+</template>
+<script lang="ts" setup>
+  import { usePagination } from 'vue-request'
+  import { delRepository, queryRepositoryList } from '/@/api/sys/repository'
+  import { message, Modal, TableProps } from 'ant-design-vue'
+  import { computed, ref, defineExpose, defineEmits } from 'vue'
+  import { RepositoryInfo } from '/@/api/sys/model/repositoryModel'
+  const emit = defineEmits(['add', 'edit', 'del'])
+  const checkedRepos = ref<RepositoryInfo>({})
+  const searchInfo = ref<RepositoryInfo>({})
+  const condition = ref<any>({})
+  const columns = [
+    {
+      title: '仓库名',
+      width: '200px',
+      dataIndex: 'name',
+    },
+    {
+      title: '模式',
+      width: '100px',
+      dataIndex: 'mode',
+    },
+    {
+      title: '公开',
+      width: '100px',
+      dataIndex: 'publicAccess',
+    },
+    {
+      title: '缓存镜像',
+      width: '100px',
+      dataIndex: 'cache',
+    },
+    {
+      title: '磁盘路径',
+      dataIndex: 'diskPath',
+    },
+  ]
+
+  const {
+    data: dataSource,
+    run,
+    loading,
+    total,
+    current,
+    pageSize,
+  } = usePagination(queryRepositoryList, {
+    pagination: {
+      currentKey: 'no',
+      pageSizeKey: 'capacity',
+      totalKey: 'total',
+    },
+  })
+
+  const pagination = computed(() => ({
+    total: total.value,
+    current: current.value,
+    pageSize: pageSize.value,
+    pageSizeOptions: [10, 20, 50, 100],
+  }))
+
+  const rowSelection: TableProps['rowSelection'] = {
+    type: 'radio',
+    onSelect: (row, state) => {
+      if (state) {
+        checkedRepos.value = row
+      }
+    },
+  }
+
+  const handleTableChange: TableProps['onChange'] = (
+    pag: { pageSize: number; current: number },
+    filters: any,
+    sorter: any,
+  ) => {
+    run({
+      capacity: pag.pageSize!,
+      no: pag?.current,
+      condition: condition.value,
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      ...filters,
+    })
+  }
+
+  const add = () => {
+    emit('add', {})
+  }
+  const edit = () => {
+    if (checkedRepos.value.id) {
+      emit('edit', checkedRepos.value)
+    } else {
+      message.info('请先选择一条记录.')
+    }
+  }
+  const del = () => {
+    if (checkedRepos.value.id) {
+      Modal.confirm({
+        title: '提示',
+        content: `确认要删除${checkedRepos.value.name}仓库吗?`,
+        okText: '确认',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+          delRepository(checkedRepos.value.id).then(() => {
+            message.info('删除成功.')
+            emit('del', checkedRepos.value.id)
+            refresh()
+          })
+        },
+        onCancel() {},
+      })
+    } else {
+      message.info('请先选择一条记录.')
+    }
+  }
+  const filter = () => {
+    if (searchInfo.value.name != '') {
+      condition.value['name'] = searchInfo.value.name
+    } else {
+      delete condition.value['name']
+    }
+    refresh()
+  }
+  const refresh = () => {
+    run({
+      capacity: pageSize.value,
+      condition: condition.value,
+      no: current.value,
+    })
+  }
+  defineExpose({ refresh })
+</script>

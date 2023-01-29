@@ -1,5 +1,11 @@
 import { defHttp } from '/@/utils/http/axios'
-import { LoginParams, LoginResultModel, GetUserInfoModel, UserInfo } from './model/userModel'
+import {
+  LoginParams,
+  LoginResultModel,
+  GetUserInfoModel,
+  UserInfo,
+  PasswdInfo,
+} from './model/userModel'
 
 import { ErrorMessageMode } from '/#/axios'
 import { Page } from '/@/api/model/baseModel'
@@ -8,11 +14,9 @@ enum Api {
   Login = 'user/login',
   QueryUser = 'user',
   SaveUser = 'user',
+  Passwd = 'user/passwd',
   DelUser = 'user',
-  Logout = '/logout',
   GetUserInfo = 'user/0',
-  GetPermCode = '/getPermCode',
-  TestRetry = '/testRetry',
 }
 
 /**
@@ -41,11 +45,22 @@ export function saveUser(params: UserInfo, mode: ErrorMessageMode = 'modal') {
   )
 }
 
+export function changePasswd(params: PasswdInfo, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post<string>(
+    {
+      url: Api.Passwd,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  )
+}
+
 export function delUser(params?: number, mode: ErrorMessageMode = 'modal') {
   return defHttp.delete<any>(
     {
-      url: Api.DelUser,
-      params,
+      url: `${Api.DelUser}/${params}`,
     },
     {
       errorMessageMode: mode,
@@ -68,25 +83,4 @@ export function queryUserInfoList(params: Page<UserInfo>) {
  */
 export function getUserInfo() {
   return defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' })
-}
-
-export function getPermCode() {
-  return defHttp.get<string[]>({ url: Api.GetPermCode })
-}
-
-export function doLogout() {
-  return defHttp.get({ url: Api.Logout })
-}
-
-export function testRetry() {
-  return defHttp.get(
-    { url: Api.TestRetry },
-    {
-      retryRequest: {
-        isOpenRetry: true,
-        count: 5,
-        waitTime: 1000,
-      },
-    },
-  )
 }

@@ -19,7 +19,6 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 import { filter } from '/@/utils/helper/treeHelper'
 
 import { getMenuList } from '/@/api/sys/menu'
-import { getPermCode } from '/@/api/sys/user'
 
 import { useMessage } from '/@/hooks/web/useMessage'
 import { PageEnum } from '/@/enums/pageEnum'
@@ -102,10 +101,6 @@ export const usePermissionStore = defineStore({
       this.permCodeList = []
       this.backMenuList = []
       this.lastBuildMenuTime = 0
-    },
-    async changePermissionCode() {
-      const codeList = await getPermCode()
-      this.setPermCodeList(codeList)
     },
 
     // 构建路由
@@ -221,7 +216,7 @@ export const usePermissionStore = defineStore({
           // 这个功能可能只需要执行一次，实际项目可以自己放在合适的时间
           let routeList: AppRouteRecordRaw[] = []
           try {
-            await this.changePermissionCode()
+            // await this.changePermissionCode()
             routeList = (await getMenuList()) as AppRouteRecordRaw[]
           } catch (error) {
             console.error(error)

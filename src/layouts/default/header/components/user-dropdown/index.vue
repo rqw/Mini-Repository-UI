@@ -4,20 +4,14 @@
       <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
-          {{ getUserInfo.realName }}
+          {{ getUserInfo.fullname }}
         </span>
       </span>
     </span>
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem
-          key="doc"
-          :text="t('layout.header.dropdownItemDoc')"
-          icon="ion:document-text-outline"
-          v-if="getShowDoc"
-        />
-        <MenuDivider v-if="getShowDoc" />
+        <MenuItem key="passwd" :text="t('layout.header.dropdownItemPasswd')" icon="ion:edit" />
         <MenuItem
           key="logout"
           :text="t('layout.header.dropdownItemLoginOut')"
@@ -26,15 +20,23 @@
       </Menu>
     </template>
   </Dropdown>
+  <a-drawer
+    title="修改密码"
+    :width="720"
+    :visible="visible"
+    :body-style="{ paddingBottom: '80px' }"
+    :footer-style="{ textAlign: 'right' }"
+    @close="onClose"
+  >
+    <Passwd @success="onClose" @cancel="onClose" />
+  </a-drawer>
 </template>
 <script lang="ts">
   // components
   import { Dropdown, Menu } from 'ant-design-vue'
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface'
 
-  import { defineComponent, computed } from 'vue'
-
-  import { DOC_URL } from '/@/settings/siteSetting'
+  import { defineComponent, computed, ref } from 'vue'
 
   import { useUserStore } from '/@/store/modules/user'
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting'
@@ -44,11 +46,10 @@
 
   import headerImg from '/@/assets/images/header.jpg'
   import { propTypes } from '/@/utils/propTypes'
-  import { openWindow } from '/@/utils'
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent'
 
-  type MenuEvent = 'logout' | 'doc'
+  type MenuEvent = 'logout' | 'passwd'
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -56,7 +57,7 @@
       Dropdown,
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      MenuDivider: Menu.Divider,
+      Passwd: createAsyncComponent(() => import('./Passwd.vue')),
     },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
@@ -66,10 +67,10 @@
       const { t } = useI18n()
       const { getShowDoc } = useHeaderSetting()
       const userStore = useUserStore()
-
+      const visible = ref(false)
       const getUserInfo = computed(() => {
-        const { realName = '', avatar, desc } = userStore.getUserInfo || {}
-        return { realName, avatar: avatar || headerImg, desc }
+        const { fullname = '', avatar, desc } = userStore.getUserInfo || {}
+        return { fullname, avatar: avatar || headerImg, desc }
       })
 
       const [register] = useModal()
@@ -80,8 +81,8 @@
       }
 
       // open doc
-      function openDoc() {
-        openWindow(DOC_URL)
+      function openPasswd() {
+        visible.value = true
       }
 
       function handleMenuClick(e: MenuInfo) {
@@ -89,10 +90,13 @@
           case 'logout':
             handleLoginOut()
             break
-          case 'doc':
-            openDoc()
+          case 'passwd':
+            openPasswd()
             break
         }
+      }
+      const onClose = () => {
+        visible.value = false
       }
 
       return {
@@ -102,6 +106,8 @@
         handleMenuClick,
         getShowDoc,
         register,
+        onClose,
+        visible,
       }
     },
   })

@@ -42,9 +42,16 @@ export interface UserInfo {
   id?: number
   loginName?: string
   fullname?: string
+  mail?: string
+  tel?: string
   password?: string
   realPassword?: string
   act?: string
   mrt?: string
   permissionList?: Array<number>
+}
+export interface PasswdInfo {
+  oldPassword?: string
+  newPassword?: string
+  againPassword?: string
 }
