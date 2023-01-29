@@ -21,6 +21,7 @@ import {
   Checkbox,
   Textarea,
   Switch,
+  Tag,
 } from 'ant-design-vue'
 const antComponents = [
   Input,
@@ -42,6 +43,7 @@ const antComponents = [
   Checkbox,
   Switch,
   Textarea,
+  Tag,
 ]
 export function registerGlobComp(app: App) {
   antComponents.forEach((component) => app.component(component.name, component))

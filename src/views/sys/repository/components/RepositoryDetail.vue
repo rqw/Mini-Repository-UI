@@ -33,7 +33,7 @@
           <a-radio-button :value="0">停用</a-radio-button>
           <a-radio-button :value="2">只读</a-radio-button>
           <a-radio-button :value="4">仅写入</a-radio-button>
-          <a-radio-button :value="6">读写</a-radio-button>
+          <a-radio-button :value="6">可读写</a-radio-button>
         </a-radio-group>
       </a-form-item>
 

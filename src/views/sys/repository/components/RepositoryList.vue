@@ -28,7 +28,7 @@
     />
   </a-card>
 </template>
-<script lang="ts" setup>
+<script lang="tsx" setup>
   import { usePagination } from 'vue-request'
   import { delRepository, queryRepositoryList } from '/@/api/sys/repository'
   import { message, Modal, TableProps } from 'ant-design-vue'
@@ -48,16 +48,36 @@
       title: '模式',
       width: '100px',
       dataIndex: 'mode',
+      customRender: ({ text }) => {
+        return (
+          <a-tag color={{ 0: 'gray', 2: 'pink', 4: 'blue', 6: '#F50' }[text]}>
+            {
+              {
+                0: '停用',
+                2: '只读',
+                4: '仅写入',
+                6: '可读写',
+              }[text]
+            }
+          </a-tag>
+        )
+      },
     },
     {
       title: '公开',
       width: '100px',
       dataIndex: 'publicAccess',
+      customRender: ({ text }) => {
+        return <a-tag color={text ? 'green' : 'gray'}>{text ? '公开' : '不公开'}</a-tag>
+      },
     },
     {
-      title: '缓存镜像',
+      title: '缓存',
       width: '100px',
       dataIndex: 'cache',
+      customRender: ({ text }) => {
+        return <a-tag color={text ? 'green' : 'gray'}>{text ? '启用' : '不启用'}</a-tag>
+      },
     },
     {
       title: '磁盘路径',
