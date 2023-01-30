@@ -9,9 +9,11 @@
         </a-col>
         <a-col :span="16">
           <a-button type="primary" @click="filter">查询</a-button>&nbsp;
-          <a-button type="primary" @click="add">新增</a-button>&nbsp;
-          <a-button type="primary" @click="edit">编辑</a-button>&nbsp;
-          <a-button type="primary" @click="del">删除</a-button>
+          <template v-if="props.modify">
+            <a-button type="primary" @click="add">新增</a-button>&nbsp;
+            <a-button type="primary" @click="edit">编辑</a-button>&nbsp;
+            <a-button type="primary" @click="del">删除</a-button>
+          </template>
         </a-col>
       </a-row>
     </a-form>
@@ -21,9 +23,10 @@
       :data-source="dataSource?.dataList"
       :pagination="pagination"
       :loading="loading"
-      :rowSelection="rowSelection"
+      :rowSelection="props.modify ? rowSelection : null"
       @change="handleTableChange"
       bordered
+      :customRow="customRow"
       size="small"
     />
   </a-card>
@@ -32,9 +35,15 @@
   import { usePagination } from 'vue-request'
   import { delRepository, queryRepositoryList } from '/@/api/sys/repository'
   import { message, Modal, TableProps } from 'ant-design-vue'
-  import { computed, ref, defineExpose, defineEmits } from 'vue'
+  import { computed, ref, defineExpose, defineEmits, defineProps } from 'vue'
   import { RepositoryInfo } from '/@/api/sys/model/repositoryModel'
-  const emit = defineEmits(['add', 'edit', 'del'])
+  const emit = defineEmits(['add', 'edit', 'del', 'change', 'dbClick'])
+  const props = defineProps({
+    modify: {
+      type: Boolean,
+      default: () => true,
+    },
+  })
   const checkedRepos = ref<RepositoryInfo>({})
   const searchInfo = ref<RepositoryInfo>({})
   const condition = ref<any>({})
@@ -84,7 +93,11 @@
       dataIndex: 'diskPath',
     },
   ]
-
+  const customRow = (record) => {
+    return {
+      onDblclick: () => emit('dbClick', record),
+    }
+  }
   const {
     data: dataSource,
     run,
@@ -112,6 +125,7 @@
     onSelect: (row, state) => {
       if (state) {
         checkedRepos.value = row
+        emit('change', checkedRepos.value)
       }
     },
   }

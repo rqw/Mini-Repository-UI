@@ -29,8 +29,11 @@
   const refList = ref()
   const refDetail = ref()
 
-  const showDetail = (user) => {
-    currentRepos.value = user
+  const showDetail = (repos) => {
+    if (repos.mirror?.length > 0) {
+      repos.mirrorSite = repos.mirror?.join('\n')
+    }
+    currentRepos.value = repos
     showDrawer()
   }
   const refresh = () => {

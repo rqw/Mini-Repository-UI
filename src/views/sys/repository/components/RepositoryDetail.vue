@@ -9,10 +9,10 @@
       :wrapper-col="{ span: 20 }"
     >
       <a-form-item label="名称" name="name" :rules="rules.name">
-        <a-input v-model:value="currentRepos.name" />
+        <a-input v-model:value="currentRepos.name" :disabled="!!currentRepos.id" />
       </a-form-item>
       <a-form-item label="路径" name="diskPath" :rules="rules.diskPath">
-        <a-input v-model:value="currentRepos.diskPath" />
+        <a-input v-model:value="currentRepos.diskPath" :disabled="!!currentRepos.id" />
       </a-form-item>
       <a-form-item label="公开">
         <a-switch
@@ -70,7 +70,10 @@
   const infoForm = ref<FormInstance>()
   const infoTitle = computed(() => (currentRepos.value.id ? '仓库信息(编辑)' : '仓库信息(新增)'))
   const rules = computed(() => ({
-    name: [{ required: true, message: '请输入仓库名称.' }],
+    name: [
+      { required: true, message: '请输入仓库名称.' },
+      { pattern: /^[\da-zA-Z-_]*$/, message: '只能输入数字、字母、下划线、横杠.' },
+    ],
     diskPath: [],
     mode: [{ required: true, message: '请选择仓库模式.' }],
     mirrorSite: [],
@@ -84,6 +87,9 @@
       ?.validate()
       .then((_res) => {
         let params = currentRepos.value
+        params.mirror = params.mirrorSite
+          ? params.mirrorSite.split('\n').filter((x) => x.match(/\S/))
+          : []
         saveRepository(params).then(() => {
           message.info('保存成功.')
           emit('success')
